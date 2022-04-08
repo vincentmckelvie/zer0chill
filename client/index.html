@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset=utf-8 />
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="scripts/styles.css">
+
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2010441611749335"
+     crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<nav class="nav">
+			<div class="user-display">
+				<div class="top-right-info" id="debug"></div>
+			</div>
+		</nav>
+		<section class="modal" id="user">
+			<div class="modal-center">
+
+				<div id="login">
+					<!--
+					<h2 class="user-header">Login</h2>
+					<form action="/login/password" method="post">
+					    <section class="user-form-holder">
+					        <label for="username">Username</label>
+					        <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+					    </section>
+					    <section class="user-form-holder">
+					        <label for="current-password">Password</label>
+					        <input id="current-password" name="password" type="password" autocomplete="current-password" required>
+					    </section>
+
+					    <button class='user-btn' type="submit">Sign in</button>
+					</form>
+					<hr>
+					<p class="help">
+						Don't have an account? <a class="user-bottom" onclick="toggleSignUp(true)" id="sign-up-btn">Sign up</a>
+					</p>
+					-->
+				</div>
+				<div id="sign-up">
+					<!--
+					<h2 class="user-header">Signup</h2>
+					<form action="/signup" method="post">
+					    <section class="user-form-holder">	
+					        <label for="username">Username</label>
+					        <input id="username" name="username" type="text" autocomplete="username" required>
+					    </section>
+					    <section class="user-form-holder">
+					        <label for="new-password">Password</label>
+					        <input id="new-password" name="password" type="password" autocomplete="new-password" required>
+					    </section>
+					    <button class='user-btn' type="submit">Sign up</button>
+					</form>
+					<hr>
+					<p class="help">
+						Already have an account? <a class="user-bottom" onclick="toggleSignUp(false)">Sign in</a>
+					</p>
+				-->
+				</div>
+				<div id="close-login-btn" class="close-btn">Close</div>
+
+			</div>
+		</section>
+		<!--
+		<section class="modal" id="sign-up">
+			<div class="modal-center">
+				
+			</div>
+		</section>
+		-->
+		<script type="text/javascript">
+			function toggleSignUp(showSignUp){
+				if(showSignUp){
+					document.getElementById("login").style.display="none";
+					document.getElementById("sign-up").style.display="block";
+				}else{
+					document.getElementById("login").style.display="block";
+					document.getElementById("sign-up").style.display="none";
+				}
+			}
+		</script>
+		<div id="container"></div>
+		<div id="hud">
+			<div id="timer">00:00</div>
+			<div id="recticle"></div>
+			
+			<div id="hit-marker"></div>
+			<div id="dmg-marker"></div>
+			<div id="hud-bottom-left-holder">
+				<div id="health-fill"></div>
+				<div id="health-outline"></div>
+				<div id="boost-fill"></div>
+				<div id="boost-outline"></div>
+				<div id="passive-ability">
+					
+				</div>
+				<div id="health-number">
+					<div id="current-health">100</div>
+					<div id="total-health">/ 100 </div>
+				</div>
+				<div id="abilities-holder">
+					<!--<div style="clear:both"></div>-->	
+				</div>
+			</div>
+			<div id="reloading">--RELOADING--</div>
+			<div id="hud-bottom-right-holder">
+				<div id="weapon-icon"></div>
+				<div id="ammo-amount-holder">
+					<div id="ammo-amount">88</div>
+					<div id="ammo-amount-total">/ 88</div>
+				</div>
+			</div>
+			<div id="hud-top-right-holder">
+				
+			</div>
+
+		</div>
+		<div id="overlay">
+			<div id="center">
+				<h1>AXIS</h1>
+				<div id="class-select">
+					
+					<span id="instructions">
+						<ul>
+							<li>Please use chrome or edge</li>
+							<li>WASD to move, LMB to shoot, RMB to ADS</li>
+							<li>SHIFT to boost, E and Q for abilities</li>
+							<li>All hitboxes are the same</li>
+							<li>This app is in BETA, please be nice.</li>
+						</ul>
+					</span>
+					<!--
+					<div id="user-name-holder">
+						<input type="text" id="user-name" placeholder="username"/>
+					</div>
+					-->
+					<h2>Class Select</h2>
+					<div id="all-classes">
+						<div class="class-btn" id="class-button-automatic">
+							Automatic
+						</div>
+						<div class="class-btn" id="class-button-sticky">
+							Sticky Bombs
+						</div>
+						<div class="class-btn" id="class-button-sub" >
+							Submachine Gun
+						</div>
+						<div class="class-btn" id="class-button-sniper">
+							Sniper
+						</div>
+						<div class="class-btn" id="class-button-launcher" >
+							Rocket Launcher
+						</div>
+						<div class="class-btn" id="class-button-sixgun">
+							Six Gun
+						</div>
+					</div>
+					<div id="player-select-character"></div>
+					<div style="clear: both;"></div>
+					<h2>Planet Switching Mechanic</h2>
+					<div id="movement-select-holder">
+						<div class="movement-btn" id="movement-button-planet">Planet Select</div>
+						<div class="movement-btn" id="movement-button-directional">Directional Boost</div>
+						<div class="movement-btn" id="movement-button-teleport">Teleport</div>
+					</div>
+					<div id="play-holder">
+						<div class="play-btn" id="play-btn">Play</div>	
+						<div class="play-btn" id="spectate-btn">Spectate</div>
+					</div>
+					<div id="nav-bar-right">
+						<div id="user-btn" class="bottom-bar-btns"></div>
+						<div id="servers-btn" class="bottom-bar-btns"></div>
+						<div id="settings-btn" class="bottom-bar-btns"></div>
+					</div>
+				</div>
+				
+				<div id="game-over">
+					<span id="game-over-text">Game Over</span> 
+				</div>
+				<div id="player-list">
+					
+				</div>
+				
+			</div>
+
+		</div>
+		<div id="error" class="modal">
+			<div id="error-center" class="modal-center">
+				<div id="error-message">error, most likely server is full.</div>
+				<div id="close-error-btn" class="close-btn">Close</div>
+			</div>
+		</div>
+
+		<div id="servers" class="modal">
+			<div id="servers-center" class="modal-center">
+				<div id="close-servers-btn" class="close-btn">Close</div>
+			</div>
+		</div>
+
+		<div id="settings" class="modal">
+			<div id="settings-center" class="modal-center">
+				<h2 id="settings-top">Settings</h2>
+				
+				<div class="settings-sub">
+					<div class="settings-left" id="settings-label"> 
+						mouse sensivity : 
+					</div> 
+					<div class="settings-right" class="settings-input-holder">
+						<input type="text" id="mouse-sens" class="settings-input-number" placeholder="1"/>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+
+				<div class="settings-sub">
+					<div class="settings-left" id="settings-label"> 
+						volume : 
+					</div> 
+					<div class="settings-right" class="settings-input-holder">
+						<input type="text" id="settings-vol" class="settings-input-number" placeholder="1"/>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				
+				<div class="settings-sub">
+					<div class="settings-left" id="settings-label"> 
+						cross hair color : 
+					</div> 
+					<div class="settings-right" class="settings-input-holder">
+						<input type="text" id="cross-hair-col" class="settings-input-hex" placeholder="fff"/>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<div class="settings-sub">
+					<div class="settings-left" id="settings-label"> 
+						ADS mouse sense mult : 
+					</div> 
+					<div class="settings-right" class="settings-input-holder">
+						<input type="text" id="settings-ads-sense-mult" class="settings-input-number" placeholder="1"/>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<div class="settings-sub">
+					<div class="settings-left" id="settings-label"> 
+						gamepad : 
+					</div> 
+					<div class="settings-right" class="settings-input-holder">
+						<input type="checkbox" id="gamepad-checkbox" class="settings-input-hex" placeholder="false"/>
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				
+				<div id="close-settings-btn" class="close-btn">Close</div>	
+			</div>
+		</div>
+
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>-->
+		<script src="seedrandom.min.js"></script>
+		<!-- Import maps polyfill -->
+		<!-- Remove this when import maps will be widely supported -->
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "./build/three.module.js"
+				}
+			}
+		</script>
+		<script type="text/javascript" src="scripts/gsap.js"></script>
+		<script type="module" src="main.js"></script>
+	</body>
+</html>

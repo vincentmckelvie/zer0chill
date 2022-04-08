@@ -1,0 +1,689 @@
+body{
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Nunito', sans-serif;
+	background: #000;
+}
+
+
+.nav{
+	color: white;
+	z-index: 400;
+	position: fixed; 
+	top: 20px; 
+	right: 20px; 
+	width: 500px; 
+	height:150px;
+	text-align: right; 
+	pointer-events: none;
+}
+
+
+.top-right-info{
+	display: inline;
+}
+.user-header{
+	color: #000;
+	margin-bottom: 20px;
+	font-size: 30px;
+}
+
+
+.logout{
+	cursor: pointer;
+	display: block;
+	padding: 5px 10px;
+	border-radius: 1px;
+	font-size: 16px;
+	border: thin solid #fff;
+	background: rgba(0,0,0,0);
+}
+
+.user-btn{
+	cursor: pointer;
+	display: inline-block;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	font-size: 20px;
+	margin-top: 20px;
+	border: thin solid #000;
+	background: rgba(0,0,0,0);
+
+}
+
+.user-bottom{
+	cursor: pointer;
+	display: inline;
+	padding: 4px 7px;
+	border-radius: 1px;
+	font-size: 16px;
+	border: thin solid #fff;
+	border-radius: 1px;
+	border: thin solid #000;
+	background: rgba(0,0,0,0);
+}
+
+.help{
+	font-size: 16px;	
+}
+
+#login{
+	display: block;
+}
+
+.user-form{
+ width: 300px;
+ height: auto;
+ padding: 20px;
+ text-align: center;
+ background: #fff;
+ margin: 0px auto;
+}
+
+#sign-up{
+	display: none;
+}
+
+.user-form-holder{
+	font-family: 'Nunito', sans-serif;
+	font-size: 18px;
+	margin-top: 20px;
+	
+}
+
+
+
+
+
+
+
+
+#timer{
+	position: fixed;
+	top: 20px;
+	font-size: 35px;
+	left: 50%;
+	margin-left: -100px;
+	width: 200px;
+	height: 60px;
+	pointer-events: none;
+	text-align: center;
+	color: #fff;
+	
+}
+
+#hud{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+	display: none;
+}
+
+#user-name{
+  width: 300px;
+  padding: 6px 4px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+#user-name-label{
+  padding: 20px;
+}
+
+#recticle{
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 6px;
+	height: 6px;
+	margin-left: -3px;
+	margin-top: -3px;
+	border-radius: 6px;
+	background: #ffffff;
+}
+
+#dmg-marker{
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 20px;
+	height: 30%;
+	margin-left: -10px;
+	background: #f00;
+	transform-origin: top center;
+	background: linear-gradient(180deg, rgba(255,0,0,0) 0%, rgba(255,0,0,255) 100%);
+	opacity: 0;
+}
+#hit-marker{
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	width: 12px;
+	height: 12px;
+	margin-left: -6px;
+	margin-top: -6px;
+	border-radius: 12px;
+	background: rgba(0,0,0,0);
+	outline: #f00 solid thin;
+}
+
+#hud-bottom-left-holder{
+	position: absolute;
+	bottom: 40px;
+	left: 40px;
+}
+#hud-bottom-right-holder{
+	position: absolute;
+	bottom: 40px;
+	right: 40px;
+}
+#hud-top-right-holder{
+	position: absolute;
+	bottom: 40px;
+	right: 40px;
+}
+
+
+#health-outline{
+	position: absolute;
+	bottom: 27px;
+	width: 150px;
+	height: 24px;
+	background-image: url("../assets/ui/health-outline-LOW.png");
+	background-size: 150px 24px;
+}
+
+#health-fill{
+	position: absolute;
+	bottom: 27px;
+	left: 0px;
+	width: 150px;
+	height: 24px;
+	background-image: url("../assets/ui/health-fill-LOW.png");
+	background-size: 150px 24px;
+	overflow-x: hidden;
+}
+
+#boost-outline{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 150px;
+	height: 24px;
+	background-image: url("../assets/ui/boost-outline-LOW.png");
+	background-size: 150px 24px;
+}
+
+#boost-fill{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 150px;
+	height: 24px;
+	background-image: url("../assets/ui/boost-fill-LOW.png");
+	background-size: 150px 24px;
+}
+
+#abilities-holder{
+	position: absolute;
+	bottom: -10px;
+	left: 165px;
+	width:300px;
+	height: 60px;
+	color: white;
+	text-align: right;
+}
+.ability-outline{
+	width: 80px;
+	height: 39px;
+	top: 0px;
+	background: url("../assets/ui/abilities-tall-LOW.png");
+	background-size: 80px 39px;
+	text-align: center;
+	padding-top: 5px;
+	font-size: 20px;
+	background-repeat: no-repeat;
+
+}
+.ability-fill{
+	position: absolute;
+	width: 80px;
+	height: 39px;
+	top: 0px;
+	background: url("../assets/ui/abilities-fill-tall-LOW.png");
+	background-size: 80px 38px;
+	transform-origin: 50% 100%;
+}
+.ability{
+	width: 80px;
+	height: 80px;
+	float: left;
+	margin-right: 12px;
+}
+
+.ability-name{
+	width: 80px;
+	text-align: center;
+	font-size: 10px;
+}
+.passive{
+	height: 10px;
+}
+
+#passive-ability{
+	position: absolute;
+	bottom: -22px;
+	left: 0px;
+	width: 150px;
+	height: 20px;
+	font-size: 12px;
+	text-align:center;
+	color: #fff;
+}
+
+#health-number{
+	position: absolute;
+	bottom: 45px;
+	left: -10px;
+	width: 80px;
+	height: 48px;
+	color: white;
+	text-align: right;
+	
+}
+#total-health{
+	position: absolute;
+	width: 50px;
+	height: 48px;
+	margin-left: 65px;
+	margin-top: 20px;
+	font-size: 15px;
+}
+#current-health{
+	position: absolute;
+	left: 0px;
+	width: 75px;
+	height: 48px;
+	color: white;
+	font-size: 35px;
+	text-align: right;
+}
+
+#reloading{
+	position: fixed;
+	bottom: 30px;
+	width: 300px;
+	height: 40px;
+	left: 50%;
+	margin-left: -150px;
+	text-align: center;
+	color: white;
+	font-size: 25px;
+	display: none;
+}
+/*
+#weapon-icon{
+	position: absolute;
+	bottom: 0px;
+	right: 280px;
+	width: 130px;
+	height: 60px;
+	background-image: url("../assets/ui/weapon-LOW.png");
+	background-size:130px 60px;
+}
+*/
+
+#weapon-icon{
+	position: absolute;
+	bottom: -10px;
+	right: 100px;
+	width: 169px;
+	height: 78px;
+	background-image: url("../assets/ui/weapon-LOW.png");
+	background-size:169px 78px;
+}
+
+#ammo-amount-holder{
+	position: absolute;
+	bottom: 20px;
+	right: 0px;
+	width: 130px;
+	height: 60px;
+	color: white;
+}
+
+#ammo-amount{
+	position: absolute;
+	bottom: 0px;
+	right: 58px;
+	width: 60px;
+	height: 35px;
+	font-size: 35px;
+	text-align: right;
+}
+
+#ammo-amount-total{
+	position: absolute;
+	bottom: 0px;
+	right: 15px;
+	width: 40px;
+	height: 20px;
+	font-size: 17px;
+}
+
+#overlay{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+	background: rgba(0,0,0,.4);
+}
+
+#center{
+	width: 650px;
+	margin: 0px auto;
+	text-align: center;
+}
+h1{
+	font-size: 70px;
+	margin-top: 10px;
+	color: #fff;
+}
+h2{
+	margin: 3px 0px;
+	color: #fff;
+}
+#class-select{
+	color: #fff;
+	
+	margin-top: -50px;
+}
+#all-classes{
+	overflow-x: hidden;
+	overflow-y: hidden;
+	width: 150px;
+	float: left;
+}
+#instructions{
+	display: inline-block;
+	text-align: left;
+	margin-left: 0px;
+	margin-top: -10px;
+}
+
+#player-select-character{
+	width: 500px;
+	height: 300px;
+	float: right;
+}
+.class-btn, .class-btn-active{
+	cursor: pointer;
+	width: 148px;
+	height: 30px;
+	padding-top: 10px;
+	border: thin solid #fff;
+	color: #ffffff;
+	font-size: 15px;
+	background: rgba(0,0,0,0);
+	cursor: pointer;
+}
+.class-btn-active{
+	background: rgba(255,255,255,.2);
+}
+
+
+#movement-select-holder{
+	width: 100%;
+	text-align: center;
+	margin-top: 20px;
+}
+.movement-btn, .movement-btn-active{
+	cursor: pointer;
+	display: inline;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	border: thin solid #fff;
+	background: rgba(0,0,0,0);
+}
+.movement-btn-active{
+	background: rgba(255,255,255,.2);
+	
+}
+
+#play-holder{
+
+	width: 100%;
+	text-align: center;
+	margin-top: 50px;
+}
+.play-btn{
+	cursor: pointer;
+	display: inline;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	font-size: 25px;
+	border: thin solid #fff;
+	background: rgba(0,0,0,0);
+}
+
+.class-btn:hover, .movement-btn:hover {
+	background: rgba(255,255,255,.2);
+	text-decoration: none;
+}
+
+.btn {
+	text-align: center;
+	width: 150px;
+	height: 30px;
+	-webkit-border-radius: 24;
+	-moz-border-radius: 24;
+	border-radius: 1px;
+	padding: 10px 20px;
+	border: thin solid #fff;
+	color: #ffffff;
+	font-size: 15px;
+	background: rgba(0,0,0,0);
+	cursor: pointer;
+	text-decoration: none;
+}
+
+#player-list{
+	width: 600px;
+	text-align: left;
+	display: none;
+	background: rgba(0,0,0,.4);
+	padding: 20px;
+}
+
+#game-over{
+	width: 600px;
+	text-align: left;
+	display: none;
+	color: white;
+	padding: 20px;
+	font-size: 30px;
+	text-align: center;
+}
+.player-info{
+	font-size: 20px;
+	color: #fff;
+	padding: 20px 8px;
+	margin-top: 10px;
+	padding-bottom: 40px;
+	background: rgba(255,255,255,.1);
+}
+.curr-player{
+	color: #ffff56;
+}
+.kill-count{
+	display: block;
+	float: right;
+}
+.player-name{
+	display: block;
+	float: left;
+}
+
+
+#nav-bar-right{
+	position: fixed;
+	bottom: 10px;
+	right: 30px;
+	width: 40px;
+	height: 150px;
+	z-index: 200;
+	text-align: center;
+}
+.room-buttons{
+	display: inline-block;
+	cursor: pointer;
+	border-radius: 1px;
+	padding: 5px 10px;
+	border: thin solid #fff;
+	background: rgba(0,0,0,0);
+	margin-bottom: 20px;
+}
+
+.clear{
+	clear: both;
+}
+
+.room-buttons{
+	display: block;
+	cursor: pointer;
+	border-radius: 1px;
+	padding: 5px 10px;
+	border: thin solid #fff;
+	background: rgba(0,0,0,0);
+	margin-bottom: 20px;
+}
+
+.bottom-bar-btns{
+	display: block;
+	margin-bottom: 10px;
+	width: 40px;
+	height: 40px;
+	background-size: 40px 40px;
+	cursor: pointer;
+}
+
+#servers-btn{
+	background: url("/assets/ui/server.png") ;
+	background-size: 40px 40px;
+}
+#settings-btn{
+	background: url("/assets/ui/settings.png") ;
+	background-size: 40px 40px;
+}
+#user-btn{
+	background: url("/assets/ui/login.png") ;
+	background-size: 40px 40px;
+}
+
+/*#settings, #servers, #login{*/
+.modal{
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	color: #000;
+	z-index: 200;
+	background: rgba(0,0,0,.5);
+}
+
+#settings-top, #servers-top{
+	color: #000;
+}
+.modal-center{
+/*#settings-center, #servers-center{*/
+	width: 400px;
+	margin: 20px auto;
+	text-align: center;
+	background: #fff;
+	padding: 20px;
+}
+
+.settings-sub{
+	margin-bottom: 20px;
+}
+#error-message{
+	padding: 40px 20px;
+}
+.servers-sub{
+	cursor: pointer;
+	margin-bottom: 20px;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	font-size: 18px;
+	border: thin solid #000;
+	background: rgba(0,0,0,0) important;
+}
+
+.server-active{
+	cursor: pointer;
+	margin-bottom: 20px;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	font-size: 18px;
+	border: thin solid #000;
+	background: rgba(0,0,0,.4);
+}
+
+.settings-left, .servers-left{
+	float: left;
+}
+
+.settings-right, .servers-right{
+	float: right;
+}
+
+.settings-input-number{
+  width: 50px;
+  padding: 6px 4px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+.settings-input-hex{
+  width: 90px;
+  padding: 6px 4px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+
+.close-btn{
+	cursor: pointer;
+	display: inline-block;
+	padding: 10px 20px;
+	border-radius: 1px;
+	padding: 10px 20px;
+	font-size: 20px;
+	margin-top: 20px;
+	border: thin solid #000;
+	background: rgba(0,0,0,0);
+}
+
