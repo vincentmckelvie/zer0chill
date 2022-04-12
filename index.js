@@ -221,7 +221,7 @@ class Player{
     this.movement = "boost";
     this.xpAdd = 0;
     this.deathCount = 0;
-    this.skin = "Default"
+    this.skin = "default"
   }
   
   update(OBJ){
@@ -274,6 +274,7 @@ class Player{
     this.meshName = OBJ.meshName;
     this.movement = OBJ.movement;
     this.name = OBJ.name;
+    this.skin = OBJ.skin;
     this.playing = true;
     this.health = 100;
   }
@@ -323,7 +324,7 @@ io.on('connection', (socket) => {
     socket.on('startPlaying', (data)=> {
       const p = getPlayerById(data.id);
       if(p != null){
-        p.player.startPlaying({meshName:data.meshName, name:data.name, movement:data.movement});
+        p.player.startPlaying({meshName:data.meshName, name:data.name, movement:data.movement, skin:data.skin});
       }
     });
 
