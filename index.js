@@ -38,13 +38,13 @@ class Game{
 
     this.endGameLength = 2;
     this.gameLength = 200;
-    //this.gameLength = 30;
+    //this.gameLength = 20;
     this.timerInterval;
     this.currentWinners = [];
 
-    for(let i = 0; i < 10+Math.random()*10; i ++){
-      this.itemArr.push(new Item({index:i}));
-    }
+    // for(let i = 0; i < 10+Math.random()*10; i ++){
+    //   this.itemArr.push(new Item({index:i}));
+    // }
 
     this.timerInterval = null;
     const self = this;
@@ -105,6 +105,7 @@ class Game{
     
     this.state = "pregame";
     this.seed = Math.floor( Math.random()*10000 );
+    this.itemArr = [];
     for(let i = 0; i < 10+Math.random()*10; i ++){
       this.itemArr.push(new Item({index:i}));
     }
@@ -365,12 +366,11 @@ io.on('connection', (socket) => {
       if(p != null){
           io.to(p.player.game).emit('serverAbilityVisual', data);
       }
-      
     });
 
     socket.on('getItem', (data)=> {
       const p = getPlayerById(data.id);
-      if(p != null && !p.game.itemArr[data.index]!=null){
+      if(p != null && p.game.itemArr[data.index] != null){
         if(!p.game.itemArr[data.index].killed){
           //const game = getGameByName(p.player.room);
           p.player.heal();
