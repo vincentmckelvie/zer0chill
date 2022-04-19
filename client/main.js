@@ -24,11 +24,15 @@ import { AbilityDoubleJump } from './AbilityDoubleJump.js';
 import { AbilityBlink } from './AbilityBlink.js';
 import { RemoteController } from './RemoteController.js';
 import { PlayerSelectScene } from './PlayerSelectScene.js';
+import { TitleScene } from './TitleScene.js';
+import { ParallaxGUI } from './ParallaxGUI.js';
+
 import { Settings } from './Settings.js';
+import { SkinsHandler } from './SkinsHandler.js';
+
 import { Servers } from './Servers.js';
 import { GamePad } from './GamePad.js';
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
-
 
 const abilities = {
 	planetSwitch:{
@@ -149,19 +153,19 @@ const particles = {
 	},
 	boost:{
 		burst:false,
-		amount:30,
+		amount:10,
 	    killTimeout:600, 
 	    mesh:"box", 
-	    col: new THREE.Color().setHSL(.4,1,.7), 
+	    col: new THREE.Color().setHSL(.1,1,.7), 
 	    pos:new THREE.Vector3(), 
-	    rndPos:3, 
+	    rndPos:.1, 
 	    rot:new THREE.Vector3(), 
 	    rndRot:Math.random()*(Math.PI*2), 
 	    rndScl:0, 
-	    scl:.3,
+	    scl:.17,
 	    velPosScale:2,
 		velRot:0,
-		velScl:-5, 
+		velScl:-8, 
 		velPosRnd: 1,
 		lookAt:false,
 		lookAtLength:0,
@@ -378,9 +382,9 @@ const globalHelperFunctions = {
 			return arr;
 		},
 	playerDoDamage:
-		function(OBJ){
+		function(OBJ){ 
 			if(appGlobal.localPlayer !=null ){
-				appGlobal.localPlayer.handleDoDamage();
+				appGlobal.localPlayer.handleDoDamage(OBJ);
 			}
 		},
 	playerReset:
@@ -512,11 +516,14 @@ const globalHelperFunctions = {
 			appGlobal.globalHelperFunctions.setUserName();
 			appGlobal.controller.initPlayer({ weapon: currentSelectWeapon, movement:currentMovement,  name:appGlobal.user});	
 			appGlobal.localPlayer = appGlobal.controller.player;
-
+			const skin = appGlobal.skinsHandler.getCurrentSkinOnCharacter(currMeshName);
+		
 			socket.emit('startPlaying', {
 				id:socket.id,
 				meshName:currMeshName,
-				name:appGlobal.user
+				name:appGlobal.user,
+				movement:currMovementName,
+				skin:skin
 			});
 
 			appGlobal.serverInfoTimeout = window.setInterval(()=> {
@@ -544,7 +551,6 @@ const globalHelperFunctions = {
 				if(obj.isMesh || obj.isSkinnedMesh){
 					
 					if(obj.materials !=null ){
-						console.log("multiple materials")
 						for(let i = 0; i<obj.materials.length; i++){
 							if(obj.materials[i].map!=null){
 								obj.materials[i].map.dispose();
@@ -571,6 +577,16 @@ const globalHelperFunctions = {
 
 			});
 		},
+	removeFromHitscanArray:
+		function(OBJ){
+			for(let i = 0; i<appGlobal.hitScanArray.length; i++){
+				if(appGlobal.hitScanArray[i]==OBJ){
+					appGlobal.hitScanArray.splice(i, 1);
+		      		i--; 
+		      	}
+			}
+			//appGlobal.hitScanArray.push(this.mesh, this.head);
+		}
 
 }
 
@@ -616,22 +632,49 @@ const appGlobal = {
 	soundHandler:null,
 	hue:0,
 	loadObjs:[
-		{name:"anis",    	    	model:null, loaded:false, url:"character-anis-2.glb"},
-		{name:"body-launcher",  	model:null, loaded:false, url:"launcher.glb"         },
-		{name:"body-sticky",    	model:null, loaded:false, url:"sticky.glb"         },
-		{name:"body-assault",   	model:null, loaded:false, url:"assault.glb"         },
-		{name:"body-submachine",   	model:null, loaded:false, url:"submachine.glb"         },
-		{name:"body-sixgun",    	model:null, loaded:false, url:"sixgun.glb"         },
-		{name:"body-sniper",    	model:null, loaded:false, url:"sniper.glb"         },
-		{name:"sniper",       		model:null, loaded:false, url:"fps-sniper.glb"    },
-		{name:"sixgun",       		model:null, loaded:false, url:"fps-sixgun.glb"    },
-		{name:"launcher",     		model:null, loaded:false, url:"fps-launcher.glb"  },
-		{name:"sticky",       		model:null, loaded:false, url:"fps-sticky.glb"  },
-		{name:"submachine",   		model:null, loaded:false, url:"fps-sub.glb"  },
-		{name:"assault",      		model:null, loaded:false, url:"fps-assault.glb"  }
+		{name:"anis",    	    	model:null, loaded:false, url:"character-anis-3.glb"},
+		{name:"body-launcher",  	model:null, loaded:false, url:"models/launcher/default/body.glb"         },
+		{name:"body-sticky",    	model:null, loaded:false, url:"models/sticky/default/body.glb"         },
+		{name:"body-assault",   	model:null, loaded:false, url:"models/assault/default/body.glb"         },
+		{name:"body-submachine",   	model:null, loaded:false, url:"models/submachine/default/body.glb"         },
+		{name:"body-sixgun",    	model:null, loaded:false, url:"models/sixgun/default/body.glb"         },
+		{name:"body-sniper",    	model:null, loaded:false, url:"models/sniper/default/body.glb"         },
+		{name:"fps-sniper",       	model:null, loaded:false, url:"models/sniper/default/fps.glb"    },
+		{name:"fps-sixgun",       	model:null, loaded:false, url:"models/sixgun/default/fps.glb"    },
+		{name:"fps-launcher",     	model:null, loaded:false, url:"models/launcher/default/fps.glb"  },
+		{name:"fps-sticky",       	model:null, loaded:false, url:"models/sticky/default/fps.glb"  },
+		{name:"fps-submachine",   	model:null, loaded:false, url:"models/submachine/default/fps.glb"  },
+		{name:"fps-assault",      	model:null, loaded:false, url:"models/assault/default/fps.glb"  },
+		
+		{name:"title",      		model:null, loaded:false, url:"zerochill.glb"  },
+		
+		{name:"assault-boost",      model:null, loaded:false, url:"models/assault/default/boost.glb"  },
+		{name:"assault-directional",model:null, loaded:false, url:"models/assault/default/directional.glb"  },
+		{name:"assault-teleport",   model:null, loaded:false, url:"models/assault/default/teleport.glb"  },
+		
+		{name:"submachine-boost",      model:null, loaded:false, url:"models/submachine/default/boost.glb"  },
+		{name:"submachine-directional",model:null, loaded:false, url:"models/submachine/default/directional.glb"  },
+		{name:"submachine-teleport",   model:null, loaded:false, url:"models/submachine/default/teleport.glb"  },
+		
+		{name:"sticky-boost",      model:null, loaded:false, url:"models/sticky/default/boost.glb"  },
+		{name:"sticky-directional",model:null, loaded:false, url:"models/sticky/default/directional.glb"  },
+		{name:"sticky-teleport",   model:null, loaded:false, url:"models/sticky/default/teleport.glb"  },
+		
+		{name:"launcher-boost",      model:null, loaded:false, url:"models/launcher/default/boost.glb"  },
+		{name:"launcher-directional",model:null, loaded:false, url:"models/launcher/default/directional.glb"  },
+		{name:"launcher-teleport",   model:null, loaded:false, url:"models/launcher/default/teleport.glb"  },
+
+		{name:"sixgun-boost",      model:null, loaded:false, url:"models/sixgun/default/boost.glb"  },
+		{name:"sixgun-directional",model:null, loaded:false, url:"models/sixgun/default/directional.glb"  },
+		{name:"sixgun-teleport",   model:null, loaded:false, url:"models/sixgun/default/teleport.glb"  },
+
+		{name:"sniper-boost",      model:null, loaded:false, url:"models/sniper/default/boost.glb"  },
+		{name:"sniper-directional",model:null, loaded:false, url:"models/sniper/default/directional.glb"  },
+		{name:"sniper-teleport",   model:null, loaded:false, url:"models/sniper/default/teleport.glb"  },
 	],
 	initedThree:false,
 	playerSelectScene:null,
+	titleScene:null,
 	user:"",
 	settingsParams:settings,
 	settings:null,
@@ -641,7 +684,9 @@ const appGlobal = {
 	gamePad:new GamePad(),
 	remotePlayers:[],
 	worldOctree:new Octree(),
-	worldsHolder:null
+	worldsHolder:null,
+	parallax:new ParallaxGUI(),
+	skinsHandler:new SkinsHandler(),
 };
 
 window.appGlobal = appGlobal;
@@ -649,11 +694,13 @@ window.appGlobal = appGlobal;
 let currentSelectWeapon = appGlobal.weapons.automatic;
 let currentMovement = abilities.planetSwitch;
 let currMeshName = "assault";
+let currMovementName = "boost"
 let joinedFirstRoom = false;
 let initedServers = false;
 let playerIndex = "";
 let playerAmount = 0;
 let maxPlayers = 0;
+let currLoad = 0;
 //let remotePlayers = [];//window.remotePlayers = {};
 let stats;
 const SERVERFPS = 20;
@@ -685,9 +732,14 @@ function initLoading(){
 
 
 function handleLoad(index, gltf){
+	currLoad++;
 	appGlobal.loadObjs[index].loaded = true;
-	appGlobal.loadObjs[index].model = gltf; 
+	appGlobal.loadObjs[index].model = gltf;
+	document.getElementById("loaded").innerHTML = currLoad;
+	document.getElementById("loading-total").innerHTML = appGlobal.loadObjs.length;
 	if(checkLoaded()){
+		document.getElementById('loading').style.display = "none";
+		document.getElementById('overlay').style.display = "block";
 		initThree();
 	}
 }
@@ -714,6 +766,8 @@ function initThree(){
 	appGlobal.itemHandler = new ItemHandler();
 	appGlobal.soundHandler = new GlobalSoundHandler();
 	appGlobal.playerSelectScene = new PlayerSelectScene();
+	appGlobal.titleScene = new TitleScene();
+	//appGlobal.parallax = new ParallaxGUI();
 	appGlobal.scene.reset();
 	
 	const container = document.getElementById( 'container' );
@@ -869,6 +923,13 @@ document.body.addEventListener( 'mousemove', ( event ) => {
 	if ( document.pointerLockElement === document.body ) {
 		if(appGlobal.globalHelperFunctions.checkPlaying()){
 			appGlobal.localPlayer.updateMouseMove(event);
+			
+		}
+	}else{
+		if(!appGlobal.playing){
+			if(appGlobal.titleScene!=null)
+				appGlobal.titleScene.updateMouseMove(event);
+				appGlobal.parallax.updateMouseMove(event);
 		}
 	}
 } );
@@ -883,6 +944,8 @@ function animate() {
 	
 	if(!appGlobal.playing){
 		appGlobal.playerSelectScene.update();
+		appGlobal.titleScene.update();
+		appGlobal.parallax.update();
 	}
 
 	appGlobal.gamePad.update();
@@ -910,12 +973,16 @@ function toggleOverlay(showOverlay){
 	}
 }
 
-document.getElementById("close-login-btn").addEventListener("click", function(){
-	document.getElementById('user').style.display = "none";
-});
-document.getElementById("user-btn").addEventListener("click", function(){
-	document.getElementById('user').style.display = "block";
-});
+if(document.getElementById("close-login-btn")!=null){
+	document.getElementById("close-login-btn").addEventListener("click", function(){
+		document.getElementById('user').style.display = "none";
+	});
+}
+if(document.getElementById("user-btn")!=null){
+	document.getElementById("user-btn").addEventListener("click", function(){
+		document.getElementById('user').style.display = "block";
+	});
+}
 
 document.getElementById("class-button-sticky").addEventListener("click", function (){
 	//handleInitPlaying(appGlobal.weapons.sticky);
@@ -956,16 +1023,19 @@ document.getElementById("class-button-sixgun").addEventListener("click", functio
 
 document.getElementById("movement-button-planet").addEventListener("click", function (){
 	//handleInitPlaying(appGlobal.weapons.sixgun);
+	currMovementName = "boost";
 	currentMovement = abilities.planetSwitch;
 	handleSwitchClass(document.getElementById("movement-button-planet"), "movement-btn-active", "movement-btn",  {type:"movement", name:"planet switch"});
 });
 document.getElementById("movement-button-directional").addEventListener("click", function (){
 	//handleInitPlaying(appGlobal.weapons.sixgun);
+	currMovementName = "directional";
 	currentMovement = abilities.directionalBoost;
 	handleSwitchClass(document.getElementById("movement-button-directional"), "movement-btn-active", "movement-btn", {type:"movement", name:"directional"});
 });
 document.getElementById("movement-button-teleport").addEventListener("click", function (){
 	//handleInitPlaying(appGlobal.weapons.sixgun);
+	currMovementName = "teleport";
 	currentMovement = abilities.teleport;
 	handleSwitchClass(document.getElementById("movement-button-teleport"), "movement-btn-active", "movement-btn", {type:"movement", name:"teleport"});
 });
@@ -990,7 +1060,9 @@ function handleSwitchClass(elem, activeName, nonActiveName, OBJ){
 	}
 	elem.className = activeName;
 	if(OBJ.type == "class")
-		appGlobal.playerSelectScene.handleCharacterSwitch( {class:OBJ.class} );
+		appGlobal.playerSelectScene.handleCharacterSwitch( {class:OBJ.class, movement:currMovementName} );
+	else if(OBJ.type=="movement")
+		appGlobal.playerSelectScene.handleMovementSwitch( {movement:currMovementName, class:currMeshName} );
 }
 
 // function handleInitPlaying(){
@@ -1001,20 +1073,21 @@ function getQuery(){
 
     const query = window.location.search.substring(1);
    	const vars = query.split("&");
-    const arr = [];
-    //for (let i = 0; i < vars.length; i++) {
-        const pair = vars[0].split('=');
+    return parseQuery(vars);
+    
+}
+
+function parseQuery(vars){
+	for (let i = 0; i < vars.length; i++) {
+        const pair = vars[i].split('=');
         if(pair != null){
 	        if (decodeURIComponent(pair[0]) == "game" || decodeURIComponent(pair[0]) == "g") {
 	        	if(isSocketRoom(pair[1]))
 	        		return pair[1];
-	        	else
-	        		return null;
 	        }
-    	}else{
-    		return null;
     	}
-    //}
+    }
+    return null;
 }
 
 function isSocketRoom(name){
@@ -1034,6 +1107,7 @@ socket.on('connect', () => {
  	socket.on('serverInitialPing', (data)=>{
  		
  		if(data.id==socket.id && !initedServers){
+ 			
  			appGlobal.servers = new Servers({info:data.info});
 	 		const q = getQuery();
 	 		if(q != null){
@@ -1042,6 +1116,7 @@ socket.on('connect', () => {
 	 			socket.emit("switchRooms", {id:socket.id, gameToJoin:data.gameToJoin, gameToLeave:"join"});
 	 		}
 	 		initedServers = true;
+
  		}
 
  	})
@@ -1106,7 +1181,7 @@ socket.on('connect', () => {
 					}else{
 						if(data.players[i].playing){
 							if(!player.controller.playing){
-						    	player.controller.initRemotePlayer({meshName:data.players[i].meshName});
+						    	player.controller.initRemotePlayer({meshName:data.players[i].meshName, movement:data.players[i].movement, skin:data.players[i].skin});
 						    }else{
 
 						    	player.controller.updateRemote({
@@ -1156,17 +1231,118 @@ socket.on('connect', () => {
 	});
   
 	socket.on('endGame', (data) => {
+		
 		document.getElementById("debug").innerHTML = data.state;
 		appGlobal.gameState = data.state;
 
 		if(checkIfWinnerId(socket.id, data.winners)){
-			document.getElementById("game-over-text").innerHTML = "VICTORY!"
+			document.getElementById("game-over-text").innerHTML = "VICTORY!";
 		}else{
-			document.getElementById("game-over-text").innerHTML = "DEFEAT"
+			document.getElementById("game-over-text").innerHTML = "DEFEAT";
 		}
+
+		if(window.logged.in){
+			for(let i = 0;i<data.endGamePackage.length; i++){
+				if(socket.id == data.endGamePackage[i].id){
+					
+					const xpAdd =       data.endGamePackage[i].xpAdd;
+					const deathCount =  data.endGamePackage[i].deathCount;
+					const killCount =   data.endGamePackage[i].killCount;
+					
+					// $.get("/endgame?xpAdd="+xpAdd+"&deathCount="+deathCount+"&killCount="+killCount, function(OBJ) {
+					// 	//if(OBJ.xpAdd && OBJ.xpTotal )
+					// 	//console.log(OBJ)
+					// 	document.getElementById("xp-bar").style.display = "inline-block";
+					// 	document.getElementById("game-over-stats").style.display = "block";
+						
+					// 	document.getElementById("xp-add").innerHTML =   parseInt(OBJ.xpAdd);
+					// 	document.getElementById("xp-total").innerHTML = parseInt(OBJ.xpTotal);
+					// 	let kdMatch = 0;
+					// 	if(parseInt(OBJ.deathAdd) != 0){
+					// 		kdMatch = parseInt(OBJ.killAdd) / parseInt(OBJ.deathAdd);
+					// 	}
+						
+					// 	document.getElementById("kd-match").innerHTML =   ( kdMatch ).toFixed(2);
+						
+					// 	let kdTotal = 0;
+					// 	if(parseInt(OBJ.deathTotal) != 0){
+					// 		kdTotal = parseInt(OBJ.killTotal) / parseInt(OBJ.deathTotal);
+					// 	}
+					// 	document.getElementById("kd-total").innerHTML = (kdTotal).toFixed(2);
+
+					// })
+					document.getElementById("xp-bar").style.display = "none";
+					document.getElementById("game-over-stats").style.display = "none";
+					document.getElementById("xp-error").style.display = "none";
+						
+					fetch("/endgame",{
+						method:"POST",
+						headers:{
+							"Content-Type":"application/json",
+							"Accept":"application/json"
+						},
+						body:JSON.stringify({
+							xpAdd:xpAdd,
+							deathCount:deathCount,
+							killCount:killCount
+						})
+					}).then( res => {
+						if(res.ok) {
+							return res.json()
+						}else{
+							return res.json().then(json => Promise.reject(json))
+						}
+					}).then( data => {
+						if(data.error!=null){
+							document.getElementById("xp-bar").style.display = "none";
+							document.getElementById("game-over-stats").style.display = "none";
+							document.getElementById("xp-error").style.display="block";
+							document.getElementById("xp-error").innerHTML = data.error;
+						}else{
+				
+							document.getElementById("xp-bar").style.display = "inline-block";
+							document.getElementById("game-over-stats").style.display = "block";
+							document.getElementById("xp-error").style.display="none";
+							
+							document.getElementById("xp-add").innerHTML =   parseInt(data.xpAdd);
+							document.getElementById("xp-total").innerHTML = parseInt(data.xpTotal);
+							
+							let kdMatch = 0;
+							if(parseInt(data.deathAdd) != 0){
+								kdMatch = parseInt(data.killAdd) / parseInt(data.deathAdd);
+							}
+							
+							document.getElementById("kd-match").innerHTML =   ( kdMatch ).toFixed(2);
+							
+							let kdTotal = 0;
+							if(parseInt(data.deathTotal) != 0){
+								kdTotal = parseInt(data.killTotal) / parseInt(data.deathTotal);
+							}
+
+							document.getElementById("kd-total").innerHTML = (kdTotal).toFixed(2);
+
+							document.getElementById("hc-total").innerHTML = parseInt(data.bux);
+							document.getElementById("hc-match").innerHTML = parseInt(data.buxAdd);
+						}
+						
+
+					}).catch(e => {
+						
+						document.getElementById("xp-bar").style.display = "none";
+						document.getElementById("game-over-stats").style.display = "none";
+						document.getElementById("xp-error").style.display="block";
+						document.getElementById("xp-error").innerHTML = "there was an error retrieving your data ;/";
+
+					})		
+				}
+			}
+		}else{
+			document.getElementById("xp-bar").style.display = "none";
+			document.getElementById("game-over-stats").style.display = "none";
+		}
+
 		appGlobal.globalHelperFunctions.playerReset(socket.id, false);
 		document.exitPointerLock();
-
 		overlayChildDisplayHelper();
 		
 	});

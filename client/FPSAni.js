@@ -18,9 +18,26 @@ class FPSAni {
 	constructor(OBJ) {
 
 		const self = this;
-		const model = self.getModelByName(OBJ.model)
+		const model = self.getModelByName("fps-"+OBJ.model)
 		this.weaponName = OBJ.name;
 		this.mesh = clone( model.scene );
+		// const ar=[];
+		// this.mesh.traverse( function ( obj ) {
+
+	 //        if(obj.isMesh || obj.isSkinnedMesh){
+	 //          if(obj.material !=null ){
+	 //          	if(!self.checkIsInArr(ar, obj.material.name)){
+	 //          		ar.push(obj.material.name);
+		// 			console.log("{");
+		// 			console.log("name:'"+obj.material.name+"',");
+		// 			console.log("color:'"+obj.material.color.getHexString()+"',");
+		// 			console.log("emissive:'"+obj.material.emissive.getHexString ()+"'");
+		// 			console.log("}");
+	 //            }
+	 //          }
+	 //        }
+
+  //     	});
 		
 		appGlobal.controller.playerCamera.add(this.mesh);
 
@@ -46,6 +63,9 @@ class FPSAni {
 		this.idleTarg = 1;
 		this.adsTarg = 0;
 		this.rotTarg = new Vector3();
+		const skin =  appGlobal.skinsHandler.getCurrentSkinOnCharacter(OBJ.model);
+		appGlobal.skinsHandler.changeSwatchOnMesh({meshes:[this.mesh], name:OBJ.model}, skin);
+
 		const emissive = self.getMaterialByName("emissive", this.mesh);
 		const blast = self.getMaterialByName("blast", this.mesh);
 		//let name = "tip";
@@ -55,32 +75,50 @@ class FPSAni {
 		this.tipPosition = new Vector3(); 
 		this.boosting = false;
 		this.boostTarg = 0;
-		this.emissiveHelper = new WeaponEmissiveHandler({name:OBJ.model, emissive:emissive, blast:blast, blastModel:this.tipObject});
+		
+		this.emissiveHelper = new WeaponEmissiveHandler({name:OBJ.model, emissive:emissive, blast:blast, blastModel:this.tipObject, skin:skin});
+		
 		this.reloading = false;
+		this.adsing = false;
+
+		
+	}
+
+	checkIsInArr(arr,s){
+		for(let i = 0; i<arr.length; i++){
+			if(arr[i]==s){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	update(){
 		this.tipObject.getWorldPosition(this.tipPosition);
+		
 		this.emissiveHelper.update();
+		
 		this.mixer.update(appGlobal.deltaTime*this.deltaMult);
 		const ez = 90;
 		const ezShoot = 40;
-		this.idle.weight += (this.idleTarg - this.idle.weight)   * (ez*appGlobal.deltaTime);	
+		this.idle.weight +=  (this.idleTarg - this.idle.weight)   * (ez*appGlobal.deltaTime);	
 		this.ads.weight  +=  (this.adsTarg - this.ads.weight )   * (ez*appGlobal.deltaTime);
 		this.run.weight  +=  (this.boostTarg - this.run.weight )   * (ez*appGlobal.deltaTime);	
 		if(!this.reloading){
 			this.mesh.rotation.x += (0 - this.mesh.rotation.x)       * (ezShoot*appGlobal.deltaTime)
 			this.mesh.rotation.y += (Math.PI  - this.mesh.rotation.y)* (ezShoot*appGlobal.deltaTime)
 		}
-		if(this.boosting && !this.reloading){
+		if(this.boosting && !this.reloading && appGlobal.localPlayer.animationOnFloor){
+			let onGround = true;
 			this.inc+=(appGlobal.deltaTime*80);
-			this.mesh.position.y=Math.sin(this.inc)*.06;
+			this.mesh.position.y = Math.sin(this.inc)*.06;
 		}else{
 			this.mesh.position.y+=(0-this.mesh.position.y)*appGlobal.deltaTime*40
 		}
 	}
 
 	reloadAnimation(TIME){
+		this.emissiveHelper.reload();
 		this.reloading = true;
 		const self = this;
 		gsap.to(this.mesh.rotation,   {duration:TIME/2, /*y:Math.PI,*/ x:-Math.PI*.4, /*z:0 */});
@@ -103,6 +141,7 @@ class FPSAni {
 	}
 
 	toggleADS(ADSING){
+		this.adsing = ADSING;
 		if(!this.boosting){
 			if(ADSING){
 				this.adsTarg = 1;
@@ -126,6 +165,17 @@ class FPSAni {
 			this.idleTarg = 0;
 			this.boostTarg = 1;
 		}else{
+			if(this.adsing){
+				this.adsTarg = 1;
+				this.idleTarg = 0;
+				if(this.weaponName=="sniper")
+					this.mesh.visible = false;
+			}else{ 
+				this.adsTarg = 0;
+				this.idleTarg = 1;
+				if(this.weaponName=="sniper")
+					this.mesh.visible = true;
+			}
 			this.boostTarg = 0;
 		}
 	}
@@ -163,7 +213,9 @@ class FPSAni {
 
 
 	kill(){
-		appGlobal.controller.playerCamera.remove(this.mesh)
+		appGlobal.globalHelperFunctions.tearDownObject(this.mesh);
+		appGlobal.controller.playerCamera.remove(this.mesh);
+		this.emissiveHelper.kill();
 	}
 
 }

@@ -57,11 +57,12 @@ class Abilities {
 			this.dom.append(name);
 
 		}else{
-			
-			this.dom = document.createElement("div");
-			this.dom.className = "passive";
-			this.dom.innerHTML = this.name;
-			document.getElementById('passive-ability').prepend(this.dom);
+			if(OBJ.name!="bot"){
+				this.dom = document.createElement("div");
+				this.dom.className = "passive";
+				this.dom.innerHTML = this.name;
+				document.getElementById('passive-ability').prepend(this.dom);
+			}
 
 		}
 	}
@@ -122,20 +123,21 @@ class Abilities {
 		
 		const self = this;
 		
-		if(this.cooldownFill!=null){
+		if(this.cooldownFill != null){
 			this.cooldownFill.style.height = "0px";
 		}
 		
 		if(this.sound!=null){
 			appGlobal.soundHandler.playSoundByName({name:this.sound, dist:1});
 		}
-		
-		socket.emit('abilityVisual', {
-			  id: appGlobal.localPlayer.id,
-			  abilityName:this.name,
-			  position:appGlobal.localPlayer.playerCollider.end,
-			  sound:this.sound
-		});
+		if(window.socket != null){
+			socket.emit('abilityVisual', {
+				  id: appGlobal.localPlayer.id,
+				  abilityName:this.name,
+				  position:appGlobal.localPlayer.playerCollider.end,
+				  sound:this.sound
+			});
+		}
 
 
 		if(this.abilityTime>0){
@@ -181,7 +183,8 @@ class Abilities {
 	handlePlayerLand(){
 
 		if(this.killOnLand && this.timerHelper){
-			this.cooldownFill.style.height= "39px" ;
+			if(this.cooldownFill!=null)
+				this.cooldownFill.style.height= "39px" ;
 			//this.canSetClosestWorld = true;
 			this.reset();
 			this.timerHelper = false;
@@ -221,7 +224,8 @@ class Abilities {
   	}
 
   	kill(){
-  		this.dom.remove();
+  		if(this.dom!=null)
+  			this.dom.remove();
   		clearTimeout(this.abilityTimeout);
   		clearTimeout(this.cooldownTimeout);
   	}

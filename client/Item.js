@@ -19,6 +19,8 @@ import {
 class Item {
 	//{scene:scene, worldScale:worldScale};
 	constructor(OBJ) {
+		this.obj = OBJ;
+		//this.sizeMult = OBJ.sizeMult;
 		const sizeMult = 1.2+(OBJ.sizeMult*.7);
 		const geo = new SphereGeometry( 1, 4, 2 );
 		//const geo = new TorusGeometry( 1, .3, 16, 18 );
@@ -38,9 +40,10 @@ class Item {
 			appGlobal.scene.add(this.offset);
 			this.offset.add(this.planetRot)
 			this.planetRot.add(this.rot, this.cyl);
-
 			this.rot.add(this.mesh);
 		}
+		
+		//this.scale = OBJ.scale;
 		this.rot.rotation.y = Math.PI *.5;
 		this.cyl.rotation.y = Math.PI *.5;
 		this.cyl.position.y = ((OBJ.scale*sizeMult)+OBJ.scale)/2;
@@ -56,7 +59,6 @@ class Item {
 		this.offset.lookAt(OBJ.lookPosition);
 		this.index = OBJ.index;
 		this.killed = OBJ.killed;
-
 		
 	}
 
@@ -84,13 +86,18 @@ class Item {
 
   	pickUp(){
   		this.kill();
+  		appGlobal.itemsPickedUp++;
   		appGlobal.soundHandler.playSoundByName({name:"health",dist:1});
-  		socket.emit('getItem', { 
-  			index:this.index, 
-  			id:appGlobal.localPlayer.id, 
-  			sound:"health", 
-  			position:this.offset.position 
-  		});
+  		if(window.socket != null){
+	  		socket.emit('getItem', { 
+	  			index:this.index, 
+	  			id:appGlobal.localPlayer.id, 
+	  			sound:"health", 
+	  			position:this.offset.position 
+	  		});
+  		}else{
+  			appGlobal.localPlayer.healBots({health:25})
+  		}
   // 		socket.emit('playSoundAtPosition', {
 		// 	  id: appGlobal.localPlayer.id,
 		// 	  sound:"health",
@@ -100,7 +107,7 @@ class Item {
 
   	handleCollision(){
   		
-  		if(appGlobal.localPlayer!=null){
+  		if(appGlobal.localPlayer != null){
 
 			const start = new Vector3().copy(appGlobal.localPlayer.playerCollider.start);
 			const end = new Vector3().copy(appGlobal.localPlayer.playerCollider.end);

@@ -11,7 +11,7 @@ class PlayerController {
 		this.playerCamera = new PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );		
 		this.playerCamera.rotation.order = 'YXZ';
 		this.nonPlayingCam = new PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
-		this.nonPlayingCam.position.z = appGlobal.worldScale*2;
+		this.nonPlayingCam.position.z = appGlobal.worldScale*5;
 		this.camera = this.nonPlayingCam;
 		this.player = null;
 
@@ -50,12 +50,11 @@ class PlayerController {
 			this.controls.update();
 			this.camera = this.nonPlayingCam;
 		}
-	
-		
 	}
 
 	initPlayer(OBJ){
 		this.name = OBJ.name;
+		OBJ.id = this.id;
 		this.player = new Player(OBJ); 
 	}
 	

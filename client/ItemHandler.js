@@ -15,6 +15,7 @@ class ItemHandler {
 	//{aliveTime:aliveTime, bullet:bullet};
 	constructor() {
 		this.arr=[];
+		
 	}
 	
 	update(){
@@ -34,7 +35,7 @@ class ItemHandler {
 			const rot = new Vector3().set(appGlobal.random()*(Math.PI*2),appGlobal.random()*(Math.PI*2),appGlobal.random()*(Math.PI*2));
 			const scl = w.scale;
 			const szeMult = appGlobal.random();
-			this.arr.push(new Item({ 
+			const item = new Item({ 
 				position : pos, 
 				index:i, 
 				lookPosition:w.worldPosition, 
@@ -42,7 +43,23 @@ class ItemHandler {
 				rotation:rot, 
 				scale:scl,
 				sizeMult:szeMult
-			}))
+			})
+			this.arr.push(item);
+
+		}
+	}
+
+	resetBots(){
+		const arr = [];
+		for(let i = 0; i < this.arr.length; i++){
+			arr.push(this.arr[i]);
+			this.arr[i].kill();	
+		}
+		this.arr = [];
+		for(let i = 0; i<arr.length; i++){
+
+			const item = new Item(arr[i].obj)
+			this.arr.push(item);
 		}
 	}
 

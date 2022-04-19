@@ -40,7 +40,7 @@ class AutoBullet {
 		this.isBulletDoingDamage = false;
 		this.killTimeout = setTimeout(function(){
 			self.kill();
-		}, 2000);
+		}, 1000);
 		//sphereIdx = ( sphereIdx + 1 ) % spheres.length;
 	}
 	
@@ -102,19 +102,31 @@ class AutoBullet {
 	}
 
 	playerSphereCollision() {
-		const id = appGlobal.globalHelperFunctions.playerSphereCollision(this.collider, this.id)
+		
+		const id = appGlobal.globalHelperFunctions.playerSphereCollision(this.collider, this.id);
+
 		if(id != null){
 			if(this.isLocal){
 				const self = this;
 				this.isBulletDoingDamage = true;
-				socket.emit('doDamage', {
-				  id: id.id,
-				  damage:self.damage,
-				  position:this.startPos,
-				  headShot:id.headShot,
-				  fromDamageId:socket.id
-				});
-				appGlobal.globalHelperFunctions.playerDoDamage();
+				if(window.socket != null){
+					const obj = {
+					  id: id.id,
+					  damage:self.damage,
+					  position:this.startPos,
+					  headShot:id.headShot,
+					  fromDamageId:socket.id
+					}
+					socket.emit('doDamage', obj);
+					appGlobal.globalHelperFunctions.playerDoDamage(obj);
+				}else{
+					if(id.headShot){
+						this.damage *= 1.5;
+					}
+					console.log(id.headShot)
+					appGlobal.remotePlayers[id.id].receiveDamage({headShot:id.headShot, position:this.startPos, health:this.damage})
+				}
+				
 			}
 			this.kill();
 		}

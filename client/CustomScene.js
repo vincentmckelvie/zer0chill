@@ -45,8 +45,8 @@ class CustomScene {
 		this.scene = new Scene();
 		//this.scene.background = new Color( 0x88ccff );
 		
-		this.renderer = new WebGLRenderer( { antialias: true } );
-		this.renderer.setPixelRatio( window.devicePixelRatio );
+		this.renderer = new WebGLRenderer( { antialias: false } );
+		//this.renderer.setPixelRatio( .9 );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = VSMShadowMap;
@@ -76,7 +76,7 @@ class CustomScene {
 		this.renderPass = new RenderPass( this.scene, appGlobal.controller.playerCamera );
 		this.composer.addPass( this.renderPass );
 		
-		this.outlinePass = new OutlinePass( new Vector2( window.innerWidth, window.innerHeight ), this.scene, appGlobal.controller.playerCamera );
+		this.outlinePass = new OutlinePass( new Vector2( window.innerWidth, window.innerHeight*.5 ), this.scene, appGlobal.controller.playerCamera );
 		this.composer.addPass( this.outlinePass );
 
 		this.characterOutlinePass = new OutlinePass( new Vector2( window.innerWidth, window.innerHeight ), this.scene, appGlobal.controller.playerCamera );
@@ -150,9 +150,9 @@ class CustomScene {
 		const ambientlight = new AmbientLight( 0x6688cc );
 		this.scene.add( ambientlight );
 		
-		const fillLight1 = new DirectionalLight( 0xf0f0f0, 0.5 );
-		fillLight1.position.set( -1, 1, 2 );
-		this.scene.add( fillLight1 );
+		// const fillLight1 = new DirectionalLight( 0xf0f0f0, 0.5 );
+		// fillLight1.position.set( -1, 1, 2 );
+		// this.scene.add( fillLight1 );
 
 		const fillLight2 = new DirectionalLight( 0x8888ff, 0.2 );
 		fillLight2.position.set( 0, -1, 0 );
@@ -226,28 +226,7 @@ class CustomScene {
 	
 	kill(){
 		
-		// this.scene.remove(this.particles);
-		// const self = this;
-
-		// this.scene.traverse( function ( obj ) {
-		   	
-  //           if(obj.geometry){
-  //               obj.geometry.dispose();
-  //           }
-  //           if(obj.material){
-  //           	console.log("mesh")
-  //               obj.material.dispose();
-  //           }
-  //           if(obj.mesh){
-  //           	console.log("mesh")
-  //               obj.mesh.dispose();
-  //           }
-  //           if(obj.texture){
-  //           	console.log("texture")
-  //               obj.texture.dispose();
-  //           }
-  //           //self.scene.remove(obj);
-		// });
+	
 		appGlobal.characterOutlineMeshes = [];
 		appGlobal.globalHelperFunctions.tearDownObject(this.scene);
 		

@@ -115,11 +115,13 @@ class Weapon {
 		const bullet = this.bullet;
 		const obj = this.makeBulletObj();
 		appGlobal.soundHandler.playSoundByName({name:this.sound, dist:1});
-		socket.emit('shoot', {
-		  obj: obj,
-		  id: socket.id,
-		  name: name
-		})
+		if(window.socket !=null ){
+			socket.emit('shoot', {
+			  obj: obj,
+			  id: socket.id,
+			  name: name
+			})
+		}
 
 		this.bullets.push(new this.bullet(obj, true));
 	}

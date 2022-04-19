@@ -1,10 +1,63 @@
 body{
 	margin: 0px;
 	padding: 0px;
+	/*
 	font-family: 'Nunito', sans-serif;
+	*/
+	font-family: 'Bebas Neue', sans-serif;
 	background: #000;
 }
 
+.bots-stats-biggest{
+		margin: 5px auto;
+		font-size: 34px;
+		width: 150px;
+		text-align: center;
+}
+
+.bots-stats-lower{
+	display: inline;
+	font-size: 22px;
+	margin-right: 20px;
+
+}
+.bots-score-mult{
+	font-size: 14px;
+}
+
+
+#ad-holder-horizontal{
+	width: 728px;
+	height: 90px;
+	background: #f00;
+	position: absolute;
+	margin-top: 80px;
+	margin-left: -40px;
+	overflow: hidden;
+}
+
+#ad-holder-right{
+	width: 300px;
+	height: 250px;
+	background: #f00;
+	display:inline-block; position:absolute; margin-left:600px;
+	margin-top: 320px;
+	overflow: hidden;
+}
+
+#ad-holder-left{
+	display:inline-block; position:absolute; margin-left:-500px;
+	width: 300px;
+	height: 250px;
+	background: #0f0;
+	margin-top: 320px;
+	overflow: hidden;
+	/*
+	position: relative;
+	display: inline-block;
+	margin-left: -600px;
+	*/
+}
 
 .nav{
 	color: white;
@@ -18,16 +71,189 @@ body{
 	pointer-events: none;
 }
 
-
-.top-right-info{
-	display: inline;
-}
 .user-header{
 	color: #000;
 	margin-bottom: 20px;
 	font-size: 30px;
 }
 
+#add-friend-btn{
+	position: absolute;
+	display: inline-block;
+	margin-left: 10px;
+	margin-top: 4px;
+	cursor: pointer;
+}
+
+#add-friend-label{
+	margin-right: 10px;
+}
+#add-friend-user-name{
+	height: 26px;
+}
+#add-friend-label{
+	display:inline;
+	position:relative;
+	top:5px;
+}
+#friends-list{
+	margin-top: 20px;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+.friends-holder{
+	display: inline-block;
+	margin: 10px auto;
+	margin-bottom: 5px;
+	margin-top: 2px;
+	padding: 15px;
+	outline: solid black thin;
+	margin-bottom: 10px;
+	width: 400px;
+}
+.friends-name{
+	float: left;
+}
+
+.friends-right{
+	float: right;
+}
+.friends-right div{
+	display: inline-block;
+	margin-right: 10px;
+}
+.friend-remove{
+	cursor: pointer;
+}
+
+.friend-request-holder{
+	margin: 10px auto;
+	padding: 15px;
+	display: inline-block;
+	outline: solid black thin;
+	margin-bottom: 10px;
+	width: 300px;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+.friend-request-left{
+	float: left;
+}
+.friend-request-right{
+	float: right;
+}
+
+.friend-request-right div{
+	float: left;
+	margin-left: 16px;
+	cursor: pointer;
+}
+
+
+.top-right-info{
+	display: inline;
+}
+
+#user-greeting{
+	color: #000;
+}
+#user-modal{
+	width: 600px;
+}
+
+#user-stats-holder{
+	font-size: 20px;
+	margin-top: 10px;
+}
+
+.items-holder{
+	max-height: 60vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#add-friend-success, #add-friend-error, #request-error{
+	font-size: 16px;
+	color: #555;
+	margin-top: 10px;
+}
+
+#user-current-hype{
+	text-align:left; padding-left:50px; font-size:50px;
+}
+#user-hype-message{
+	text-align:left; padding-left:50px; font-size:20px;
+	color: #555;
+	margin-bottom:10px;
+
+}
+
+#bux-holder{
+	max-height: 60vh;
+	overflow-y: auto;
+}
+.items-individual-holder, .bux-buy{
+	display: inline-block;
+	margin-left: 25px;
+	padding: 10px;
+	height: auto;
+	border: solid black thin;
+	text-align: left;
+	width: 500px;
+	cursor: pointer;
+}
+
+.items-left, .bux-left{
+	text-align: left;
+	float: left;
+}
+.items-right, .bux-right{
+	float: right;
+}
+
+.items-individual-desc, .bux-individual-desc{
+	font-size: 20px;
+	color: #555;
+}
+
+.items-individual-desc{
+	font-size: 16px;
+}
+.items-individual-name, .bux-individual-name {
+	font-size: 25px;
+	display: inline-block;
+}
+
+.items-individual-price, .bux-individual-price{
+	font-size: 32px;
+	display: inline-block;
+	margin-left: 10px;
+}
+
+
+.items-buy-overlay{
+	position: absolute;
+	margin-top: -80px;
+	background: rgba(0,0,0,0);
+	width: 80px;
+	height: 80px;
+}
+
+.items-buy-overlay: hover, .play-btn: hover {
+	background: rgba(0,0,0,.5);
+}
+
+.items-img, .bux-img{
+	width: 80px;
+}
+.bux-img{
+	width: 50px;
+}
+
+.items-individual-icon, .bux-individual-icon{
+	
+}
 
 .logout{
 	cursor: pointer;
@@ -40,6 +266,7 @@ body{
 }
 
 .user-btn{
+	font-family: 'Bebas Neue', sans-serif;
 	cursor: pointer;
 	display: inline-block;
 	padding: 10px 20px;
@@ -86,7 +313,10 @@ body{
 }
 
 .user-form-holder{
+	/*
 	font-family: 'Nunito', sans-serif;
+	*/
+	font-family: 'Bebas Neue', sans-serif;
 	font-size: 18px;
 	margin-top: 20px;
 	
@@ -94,9 +324,84 @@ body{
 
 
 
+#title{
+	width: 500px;
+	height: 200px;
+	display: inline-block;
+	/*
+	background-size: 500px 250px;
+	background-image: url("../assets/ui/title.png");
+	*/
+}
+
+#xp-bar{
+	margin: 10px auto;
+	width: 600px;
+	height: 40px;
+	background: #fff;
+}
+
+#xp-error{
+	color: #aaa;
+	font-size: 16px;
+}
 
 
+#game-over-stats{
+	font-size: 13px;
+	text-align: center;
 
+}
+
+.user-section-holders{
+	display: none;
+	font-size: 25px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+}
+#user-header-buttons-holder{
+
+}
+.user-header-buttons, .user-header-buttons-active{
+	display: inline-block;
+	margin: 5px 20px;
+	font-size: 28px;
+	cursor: pointer;
+	max-width: 130px;
+	overflow-x: hidden;
+	text-decoration: none;
+
+}	
+.user-header-buttons : hover{
+	text-decoration: underline;
+}
+
+.user-header-buttons-active{
+	text-decoration: underline;
+}
+
+#game-over-stats div{
+	display: inline-block;
+	margin: 5px 10px;
+}	
+
+#loading{
+	display: block;
+}
+#loading-centered{
+	color: #fff;
+	text-align: center;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+
+	margin-left: -150px;
+	height: 100px;
+	margin-top: -50px;
+	font-size: 20px;
+}
 
 
 #timer{
@@ -168,15 +473,22 @@ body{
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	width: 12px;
-	height: 12px;
-	margin-left: -6px;
-	margin-top: -6px;
-	border-radius: 12px;
-	background: rgba(0,0,0,0);
-	outline: #f00 solid thin;
+	width: 60px;
+	height: 60px;
+	margin-left: -30px;
+	margin-top: -30px;
+	background-image: url("../assets/ui/dmg-marker-bs.png");
+	background-size: 60px 60px;
+	/*outline: #f00 solid thin;*/
 }
-
+#kills-bots{
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	font-size: 20px;
+	text-align: left;
+	color: #fff;
+}
 #hud-bottom-left-holder{
 	position: absolute;
 	bottom: 40px;
@@ -382,6 +694,7 @@ body{
 }
 
 #overlay{
+	display: none;
 	position: fixed;
 	top: 0px;
 	left: 0px;
@@ -392,9 +705,15 @@ body{
 }
 
 #center{
-	width: 650px;
+	width: 780px;
 	margin: 0px auto;
 	text-align: center;
+	max-height:100%; 
+	overflow-y:auto; 
+	overflow-x:visible;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 50px;
 }
 h1{
 	font-size: 70px;
@@ -424,10 +743,44 @@ h2{
 }
 
 #player-select-character{
-	width: 500px;
-	height: 300px;
-	float: right;
+	width: 400px;
+	height: 250px;
+	margin-left: 20px;
+	float: left;
 }
+
+#player-skins{
+	width: 90px;
+	height: 250px;
+	float: left;
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin-right: 10px;
+}
+.swatch-btn, .swatch-btn-active{
+	width: 60px;
+	height: 60px;
+	margin-left: 2px;
+	margin-top: 2px;
+	border: none;
+	border-radius: 30px;
+	margin-bottom: 8px;
+	outline: 1px solid black;
+	background-size: 100%;
+}
+.swatch-btn-active{
+	outline: 1px solid white;
+}
+
+.skins-non-interactive{
+	opacity: .5;
+	/*pointer-events: none;*/
+}
+.skins-interactive{
+	
+}
+
+
 .class-btn, .class-btn-active{
 	cursor: pointer;
 	width: 148px;
@@ -582,15 +935,15 @@ h2{
 }
 
 #servers-btn{
-	background: url("/assets/ui/server.png") ;
+	background: url("/assets/nongameui/server.svg") ;
 	background-size: 40px 40px;
 }
 #settings-btn{
-	background: url("/assets/ui/settings.png") ;
+	background: url("/assets/nongameui/settings.svg") ;
 	background-size: 40px 40px;
 }
 #user-btn{
-	background: url("/assets/ui/login.png") ;
+	background: url("/assets/nongameui/user-white.svg") ;
 	background-size: 40px 40px;
 }
 

@@ -40,13 +40,18 @@ class Hud {
 		return a * (1-t) + b * t
 	}
 
-	doDamageMarker(){
+	doDamageMarker(headshot){
 
 		if(this.damageMarkerTimeout != null){
 			clearTimeout(this.damageMarkerTimeout)
 		}
 		const self = this;
 		//this.hitMarker.style.display = "block";
+		if(headshot){
+			this.hitMarker.style.backgroundImage = 'url("../assets/ui/dmg-marker-hs.png")';
+		}else{
+			this.hitMarker.style.backgroundImage = 'url("../assets/ui/dmg-marker-bs.png")';
+		}
 		this.toggleElem(this.hitMarker, true)
 		this.damageMarkerTimeout = setTimeout(function(){
 			self.toggleElem(self.hitMarker, false)

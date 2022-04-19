@@ -27,7 +27,7 @@ class StickyBullet {
 		this.alivetime = 2000;
 		
 		const rad = .2;
-		const sphereGeometry = new SphereGeometry( rad, 32, 32 );
+		const sphereGeometry = new SphereGeometry( rad, 6, 6 );
 		const sphereMaterial = new MeshStandardMaterial( { color: 0xffffff, roughness: 0.8, metalness: 0.5 } );
 		this.mesh = new Mesh( sphereGeometry, sphereMaterial );
 		this.mesh.castShadow = true;
@@ -94,31 +94,40 @@ class StickyBullet {
 		
 		const self = this;
 		gsap.to(this.mesh.scale,{duration:.3, x:0, y:0, z:0, ease: "back.in(5)", delay:0, onComplete:function(){
-			self.kill();
+			self.kill(false);
 		}});
 		
 		this.stuck = true;
 		
 	}
 	
-	kill(){
+	kill(hitPlayer){
+
 		if(!this.killed){
 			
 			if(this.isLocal){
 				this.knockParams.pos = this.mesh.position;
-				appGlobal.globalHelperFunctions.knockPlayer(this.knockParams);
+				if(!hitPlayer){
+					appGlobal.globalHelperFunctions.knockPlayer(this.knockParams);
+				}
 
 				const arr = appGlobal.globalHelperFunctions.splashDamage(this.knockParams);
 				if(arr.length>0){
 					for(let i = 0; i<arr.length; i++){
 						const self = this;
-						socket.emit('doDamage', {
-					  		id: arr[i].id,
-					  		damage:self.damage*arr[i].damageMult,
-					  		position:appGlobal.localPlayer.playerCollider.start,
-					  		headShot:false,
-					  		fromDamageId:socket.id
-						});
+						if(window.socket != null){
+							const obj = {
+						  		id: arr[i].id,
+						  		damage:self.damage*arr[i].damageMult,
+						  		position:appGlobal.localPlayer.playerCollider.start,
+						  		headShot:false,
+						  		fromDamageId:socket.id
+							}
+							socket.emit('doDamage', obj);
+							appGlobal.globalHelperFunctions.playerDoDamage(obj);
+						}else{
+							appGlobal.remotePlayers[arr[i].id].receiveDamage({headShot:false, position:this.mesh.position, health:this.damage})
+						}
 
 					}			
 				}
@@ -139,7 +148,7 @@ class StickyBullet {
 	playerSphereCollision() {
 		const id = appGlobal.globalHelperFunctions.playerSphereCollision(this.collider, this.id)
 		if(id != null){
-			this.kill();
+			this.kill(true);
 		}
 	}
 
