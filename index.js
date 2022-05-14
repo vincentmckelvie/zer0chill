@@ -368,6 +368,14 @@ io.on('connection', (socket) => {
       }
     });
 
+    socket.on('abilityExtras', (data)=> {
+      const p = getPlayerById(data.id);
+      if(p != null){
+          io.to(p.player.game).emit('serverAbilityExtras', data);
+      }
+    });
+
+
     socket.on('getItem', (data)=> {
       const p = getPlayerById(data.id);
       if(p != null && p.game.itemArr[data.index] != null){
