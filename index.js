@@ -1,4 +1,5 @@
 require('dotenv').config();
+const weaponStats = require('./WeaponStats.js');
 let express = require('express');
 var app = express();
 var http = require('http').createServer(app);
@@ -24,7 +25,6 @@ const socketRooms = [
 ];
 
 class Game{
-
   constructor(OBJ){
     this.index = OBJ.index;
     this.maxPlayers = 8;
@@ -174,7 +174,7 @@ class Game{
       if(self.time<=0){
         self.resetGame();
       }
-    },1000);
+    },5000);
     
   }
 
@@ -240,7 +240,7 @@ class Player{
   }
 
   doDamage(OBJ){//player does damage to this player
-    let fnlDamage = OBJ.damage;
+    let fnlDamage = this.getDmgFromName(OBJ.name);
     if(OBJ.headShot){
       fnlDamage *= 1.51;
     }
@@ -252,12 +252,21 @@ class Player{
   }
 
   didDamage(OBJ){//did damage to another player
-    let fnlDamage = OBJ.damage;
+    let fnlDamage = this.getDmgFromName(OBJ.name);
     if(OBJ.headShot){
       fnlDamage *= 1.51;
     }
     this.xpAdd += Math.ceil(fnlDamage*.5);
     //this.totalDamage += Math.ceil(fnlDamage);
+  }
+
+  getDmgFromName(name){
+    for(let i = 0; i<weaponStats.WeaponStats.length; i++){
+      if(name == weaponStats.WeaponStats[i].name){
+        return weaponStats.WeaponStats[i].damage;
+      }
+    }
+    return 0;
   }
 
   didGetKill(OBJ){
@@ -360,7 +369,15 @@ io.on('connection', (socket) => {
       }
       
     });
-   
+    
+    socket.on("clientDoTestShooting", (data)=>{
+      const p = getPlayerById(data.id);
+      if(p != null){
+          console.log("client do test shooting");
+          io.to(p.player.game).emit('serverDoTestShooting', data);
+      }
+    });
+
     socket.on('abilityVisual', (data)=> {
       const p = getPlayerById(data.id);
       if(p != null){
@@ -436,6 +453,7 @@ function joinGame(OBJ, firstJoin){
     }
 
   }else{
+
     OBJ.socket.join("join");
     io.to("join").emit('serverCantJoinGame', {id:OBJ.socket.id});
 
